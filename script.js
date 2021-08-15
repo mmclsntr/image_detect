@@ -1,12 +1,17 @@
 const startCapturingButton = document.querySelector("#start-capturing");
 const takeScreenshotsButton = document.querySelector("#take-screenshots");
+const startScreenshotsButton = document.querySelector("#start-screenshots");
+const stopScreenshotsButton = document.querySelector("#stop-screenshots");
+const intervalSecondInput = document.querySelector("#interval-second");
 //const downloadScreenshotsButton = document.querySelector("#download-screenshots");
 const detectScreenshotsButton = document.querySelector("#detect-screenshots");
 const videoScreenshot = document.querySelector("div#capture-stream video");
 const canvasScreenshot = document.querySelector("div#screenshot canvas");
-const canvasDetectOutput = document.querySelector("canvas#detect-result");
+const canvasDetectOutput = document.querySelector("div#detect canvas");
 
-var canvasTemplate = document.querySelector('.template-image canvas');
+var timer;
+
+var canvasTemplate = document.querySelector('div.template-image canvas');
 // Image オブジェクトを生成
 var img = new Image();
 img.src = './template.png';
@@ -36,11 +41,11 @@ startCapturingButton.addEventListener('click', async () => {
     if (captureStream) {
         videoScreenshot.autoplay = true;
         videoScreenshot.srcObject = captureStream;
-        takeScreenshotsButton.removeAttribute("disabled")
+        startScreenshotsButton.removeAttribute("disabled")
     }
 });
 
-takeScreenshotsButton.addEventListener('click', async () => {
+async function takeScreenshot() {
     const videoTrack = captureStream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(videoTrack);
     const imageBitmap = await imageCapture.grabFrame();
@@ -48,15 +53,9 @@ takeScreenshotsButton.addEventListener('click', async () => {
     canvasScreenshot.width = imageBitmap.width;
     canvasScreenshot.height = imageBitmap.height;
     canvasScreenshot.getContext('2d').drawImage(imageBitmap, 0, 0);
-    detectScreenshotsButton.removeAttribute("disabled")
-});
+}
 
-// downloadScreenshotsButton.addEventListener('click', async () => {
-//     const canvas = canvasContainer.querySelector('canvas');
-//     var base64 = canvas.toDataURL("image/png");
-//     downloadScreenshotsButton.href = base64;
-// });
-detectScreenshotsButton.addEventListener('click', async () => {
+async function detectScreenshot() {
     const ss = await canvasScreenshot
     let src = cv.imread(ss);
     console.log(src)
@@ -76,4 +75,21 @@ detectScreenshotsButton.addEventListener('click', async () => {
     cv.rectangle(src, maxPoint, point, color, 2, cv.LINE_8, 0);
     cv.imshow(canvasDetectOutput, src);
     //src.delete(); dst.delete(); mask.delete();
+}
+
+async function detectCaputure() {
+    await takeScreenshot()
+    detectScreenshot()
+}
+
+startScreenshotsButton.addEventListener('click', async () => {
+    const intervalMilSecond = Number(intervalSecondInput.value) * 1000;
+    console.log(intervalMilSecond)
+    timer = setInterval(detectCaputure, intervalMilSecond);
+    stopScreenshotsButton.removeAttribute("disabled");
+});
+
+stopScreenshotsButton.addEventListener('click', async () => {
+    clearInterval(timer);
+    stopScreenshotsButton.setAttribute("disabled", true);
 });

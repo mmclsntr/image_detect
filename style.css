@@ -4,11 +4,8 @@ body {
 .results {
   display: flex;
 }
-.results div:first-child {
-  flex-basis: 50%;
-}
-.results div:last-child {
-  flex-basis: 50%;
+.results div {
+  flex-basis: 30%;
 }
 .results video,
 .results canvas{
@@ -17,8 +14,4 @@ body {
 }
 .template-image {
   display: flex;
-}
-
-canvas#detect-result {
-  width: 50%;
 }

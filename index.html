@@ -3,24 +3,28 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </header>
     <body>
+        <p>Template image</p>
+        <div class="template-image">
+            <canvas id="canvas-template"></canvas>
+        </div>
         <button id="start-capturing">Start Capturing</button>
-        <button id="take-screenshots" disabled="">Take a Screenshot</button>
-        <!-- <a id="download-screenshots" href="#" download="screenshot.png" disabled="">Download a Screenshot</a> -->
+        <button id="start-screenshots" disabled="">Start Screenshot</button>
+        <button id="stop-screenshots" disabled="">Stop Screenshot</button><br>
+        Loop second: <input type="number" value="1" id="interval-second" />
         <div class="results">
             <div id="capture-stream">
+                capture<br>
                 <video id="video"></video>
             </div>
             <div id="screenshot">
+                screenshot<br>
                 <canvas id="canvas-screenshot"></canvas>
             </div>
+            <div id="detect">
+                detect result<br>
+                <canvas id="detect-result"></canvas>
+            </div>
         </div>
-        <button id="detect-screenshots" disabled="">Detect Screenshot</button>
-        <div class="template-image">
-            <p>Template image</p><br>
-            <canvas id="canvas-template"></canvas>
-        </div>
-        <canvas id="detect-result"></canvas>
-        <!--<script async src="https://docs.opencv.org/3.4.1/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script> -->
         <script src="https://docs.opencv.org/3.4.1/opencv.js" type="text/javascript"></script>
         <script type="text/javascript" src="script.js"></script>
     </body>
